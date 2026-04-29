@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMA NEGERI GIAN CIANJUR-  Murid</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+    * { font-family: 'Poppins', sans-serif; }
+    body {
+      background: #0f172a;
+      background-image:
+        radial-gradient(at 20% 30%, #1e1b4b 0px, transparent 50%),
+        radial-gradient(at 80% 70%, #312e81 0px, transparent 50%);
+      color: #e2e8f0; min-height: 100vh;
+    }
+  .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(51, 65, 85, 0.5); }
+  .gradient-bg { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%); }
+  .gradient-text { background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f0abfc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .card-glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(71, 85, 105, 0.5); transition: all 0.3s; }
+  .card-glass:hover { border-color: rgba(139, 92, 246, 0.5); transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.3); }
+  .input-dark { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; }
+  .input-dark:focus { border-color: #8b5cf6; outline: none; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+  .tab-btn.active { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; }
+  .toast { position: fixed; top: 80px; right: 20px; z-index: 100; transform: translateX(400px); transition: all 0.4s; }
+  .toast.show { transform: translateX(0); }
+  .glow { animation: glow 2s ease-in-out infinite alternate; }
+    @keyframes glow { from { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); } to { box-shadow: 0 0 30px rgba(139, 92, 246, 0.6); } }
+  .float { animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    html { scroll-behavior: smooth; }
+  .skeleton { animation: skeleton 1.5s ease-in-out infinite; background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); background-size: 200% 100%; }
+    @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div id="loadingScreen" class="fixed inset-0 z-[100] flex items-center justify-center gradient-bg">
+    <div class="text-center">
+      <div class="w-20 h-20 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="text-white text-xl font-bold">Loading...</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+    <i class="fas fa-check-circle text-2xl"></i>
+    <div><p class="font-bold" id="toastTitle">Berhasil!</p><p class="text-sm" id="toastMsg">Aksi kamu berhasil</p></div>
+  </div>
+
+  <nav class="fixed w-full z-50 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center glow">
+            <i class="fas fa-graduation-cap text-white text-xl"></i>
+          </div>
+          <span class="font-bold text-xl gradient-text">SMA NEGERI GIAN CIANJUR<span>
+        </div>
+        <div class="flex gap-2 md:gap-3">
+          <button id="btnLogin" class="px-3 md:px-4 py-2 rounded-lg font-medium border-2 border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white transition text-sm md:text-base">Login Murid</button>
+          <a href="guru.html" class="px-3 md:px-4 py-2 rounded-lg font-medium gradient-bg text-white hover:opacity-90 transition text-sm md:text-base">Portal Guru</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Landing Page - ID PENTING BUAT HIDE -->
+  <div id="landingPage">
+    <section class="pt-24 pb-16 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-20">
+        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+      </div>
+      <div class="max-w-7xl mx-auto px-4 text-center relative z-10" data-aos="zoom-in">
+        <div class="float inline-block mb-6">
+          <div class="w-24 h-24 gradient-bg rounded-3xl flex items-center justify-center mx-auto glow">
+            <i class="fas fa-graduation-cap text-white text-5xl"></i>
+          </div>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 gradient-text">Portal Murid Digital</h1>
+        <p class="text-lg md:text-xl mb-8 text-slate-300">Akses tugas, nilai, dan pengumuman real-time</p>
+        <button id="btnMasukDashboard" class="px-8 py-4 gradient-bg text-white rounded-xl font-bold hover:scale-105 transition shadow-lg glow">Masuk Dashboard <i class="fas fa-arrow-right ml-2"></i></button>
+      </div>
+    </section>
+
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12" data-aos="fade-up">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Kenapa <span class="gradient-text">SMA NEGERI GIAN CIANJUR?</span></h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="card-glass p-8 rounded-2xl text-center" data-aos="zoom-in">
+            <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-laptop-code text-white text-2xl"></i></div>
+            <h3 class="text-xl font-bold mb-3">Digital Learning</h3><p class="text-slate-400">Semua materi, tugas, dan ujian berbasis online</p>
+          </div>
+          <div class="card-glass p-8 rounded-2xl text-center" data-aos="zoom-in" data-aos-delay="100">
+            <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-user-tie text-white text-2xl"></i></div>
+            <h3 class="text-xl font-bold mb-3">Guru Terbaik</h3><p class="text-slate-400">100% guru bersertifikasi berpengalaman</p>
+          </div>
+          <div class="card-glass p-8 rounded-2xl text-center" data-aos="zoom-in" data-aos-delay="200">
+            <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-trophy text-white text-2xl"></i></div>
+            <h3 class="text-xl font-bold mb-3">Akreditasi A</h3><p class="text-slate-400">Lulusan 98% diterima PTN favorit</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Dashboard Murid - HANYA TUGAS PENGUMUMAN NILAI -->
+  <section id="dashboardMurid" class="hidden py-24 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold">Halo, <span id="namaMurid" class="gradient-text">Murid</span>!</h2>
+        <p class="text-slate-400">Kelas: <span id="kelasMurid" class="font-bold text-indigo-400">XII IPA 1</span></p>
+      </div>
+      <div class="grid lg:grid-cols-3 gap-6">
+        <div class="card-glass p-6 rounded-2xl" data-aos="fade-right">
+          <h3 class="font-bold text-xl mb-4"><i class="fas fa-star mr-2 text-yellow-500"></i>Nilai Kamu</h3>
+          <div id="listNilai" class="space-y-3 max-h-96 overflow-y-auto"><div class="skeleton h-16 rounded-lg"></div></div>
+        </div>
+        <div class="card-glass p-6 rounded-2xl" data-aos="fade-up">
+          <h3 class="font-bold text-xl mb-4"><i class="fas fa-bullhorn mr-2 text-indigo-500"></i>Pengumuman</h3>
+          <div id="listPengumuman" class="space-y-4 max-h-96 overflow-y-auto"></div>
+        </div>
+        <div class="card-glass p-6 rounded-2xl" data-aos="fade-left">
+          <h3 class="font-bold text-xl mb-4"><i class="fas fa-upload mr-2 text-indigo-500"></i>Upload Tugas</h3>
+          <select id="mapelTugas" class="input-dark w-full px-4 py-3 rounded-lg mb-3"><option value="">Pilih Mapel</option></select>
+          <input type="file" id="fileTugas" class="w-full mb-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-500/20 file:text-indigo-300">
+          <button id="btnUploadTugas" class="w-full py-3 gradient-bg text-white rounded-lg font-bold hover:opacity-90 transition">Upload</button>
+          <div id="progressUpload" class="hidden mt-3 w-full bg-slate-700 rounded-full h-2"><div id="progressBar" class="gradient-bg h-2 rounded-full transition-all" style="width: 0%"></div></div>
+          <div class="mt-6 border-t border-slate-700 pt-4">
+            <div class="flex gap-2 mb-4">
+              <button data-tab="aktif" class="tab-btn active flex-1 py-2 rounded-lg text-sm font-medium border border-slate-700">Tugas Aktif</button>
+              <button data-tab="terkirim" class="tab-btn flex-1 py-2 rounded-lg text-sm font-medium border border-slate-700">Terkirim</button>
+            </div>
+            <div id="tab-aktif" class="tab-content space-y-2 max-h-60 overflow-y-auto"></div>
+            <div id="tab-terkirim" class="tab-content hidden space-y-2 max-h-60 overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Login -->
+  <div id="modalLogin" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="card-glass rounded-2xl p-8 max-w-md w-full relative" data-aos="zoom-in">
+      <button id="closeModal" class="absolute top-4 right-4 text-slate-500 hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
+      <h3 class="text-2xl font-bold mb-6 gradient-text">Login Murid</h3>
+      <input id="emailLogin" type="email" placeholder="Email" class="input-dark w-full px-4 py-3 rounded-lg mb-4">
+      <input id="passwordLogin" type="password" placeholder="Password" class="input-dark w-full px-4 py-3 rounded-lg mb-6">
+      <button id="submitLogin" class="w-full py-3 gradient-bg text-white rounded-lg font-bold glow">Masuk</button>
+      <p class="text-center mt-4 text-sm text-slate-400">Belum punya akun? <button id="showRegister" class="text-indigo-400 font-bold">Daftar Sekarang</button></p>
+    </div>
+  </div>
+
+  <!-- Modal Register -->
+  <div id="modalRegister" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="card-glass rounded-2xl p-8 max-w-md w-full relative" data-aos="zoom-in">
+      <button id="closeRegister" class="absolute top-4 right-4 text-slate-500 hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
+      <h3 class="text-2xl font-bold mb-6 gradient-text">Daftar Akun Murid</h3>
+      <input id="namaDaftar" type="text" placeholder="Nama Lengkap" class="input-dark w-full px-4 py-3 rounded-lg mb-3">
+      <input id="kelasDaftar" type="text" placeholder="Kelas, contoh: XII IPA 1" class="input-dark w-full px-4 py-3 rounded-lg mb-3">
+      <input id="emailDaftar" type="email" placeholder="Email" class="input-dark w-full px-4 py-3 rounded-lg mb-3">
+      <input id="passwordDaftar" type="password" placeholder="Password min 6 karakter" class="input-dark w-full px-4 py-3 rounded-lg mb-6">
+      <button id="submitRegister" class="w-full py-3 gradient-bg text-white rounded-lg font-bold glow">Daftar</button>
+      <p class="text-center mt-4 text-sm text-slate-400">Sudah punya akun? <button id="showLogin" class="text-indigo-400 font-bold">Login</button></p>
+    </div>
+  </div>
+
+  <!-- Modal Lengkapi Data -->
+  <div id="modalLengkapi" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="card-glass rounded-2xl p-8 max-w-md w-full relative" data-aos="zoom-in">
+      <h3 class="text-2xl font-bold mb-2 gradient-text">Lengkapi Data Kamu</h3>
+      <p class="text-slate-400 text-sm mb-6">Akun kamu sudah ada tapi data belum lengkap. Isi dulu ya!</p>
+      <input id="namaLengkapi" type="text" placeholder="Nama Lengkap" class="input-dark w-full px-4 py-3 rounded-lg mb-3">
+      <input id="kelasLengkapi" type="text" placeholder="Kelas, contoh: XII IPA 1" class="input-dark w-full px-4 py-3 rounded-lg mb-6">
+      <button id="submitLengkapi" class="w-full py-3 gradient-bg text-white rounded-lg font-bold glow">Simpan & Masuk</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref, onValue, push, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCuT7JzSnFhmFoNRAq5EUJfy3IU9DmP5gE",
+      authDomain: "sekolah-f2790.firebaseapp.com",
+      databaseURL: "https://sekolah-f2790-default-rtdb.firebaseio.com",
+      projectId: "sekolah-f2790",
+      storageBucket: "sekolah-f2790.firebasestorage.app",
+      messagingSenderId: "748658464539",
+      appId: "1:748658464539:web:2c54c6c76c85c44680e5be"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+
+    // PERSIST LOGIN - FIX REFRESH
+    await setPersistence(auth, browserLocalPersistence);
+
+    AOS.init({ duration: 800, once: true });
+
+    const MAPEL_SMA = ["Matematika Wajib", "Matematika Peminatan", "Bahasa Indonesia", "Bahasa Inggris", "Fisika", "Kimia", "Biologi", "Ekonomi", "Geografi", "Sosiologi", "Sejarah Indonesia", "Sejarah Peminatan", "Pendidikan Agama", "PPKN", "Seni Budaya", "PJOK", "Prakarya & Kewirausahaan", "Informatika"];
+    MAPEL_SMA.forEach(mapel => { document.getElementById('mapelTugas').innerHTML += `<option>${mapel}</option>`; });
+
+    function showToast(title, msg, isError = false) {
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toast').className = isError? 'toast bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 show' : 'toast bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 show';
+      setTimeout(() => document.getElementById('toast').classList.remove('show'), 3000);
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        e.target.classList.add('active');
+        document.getElementById(`tab-${e.target.dataset.tab}`).classList.remove('hidden');
+      });
+    });
+
+    const modalLogin = document.getElementById('modalLogin');
+    const modalRegister = document.getElementById('modalRegister');
+    const modalLengkapi = document.getElementById('modalLengkapi');
+    const loadingScreen = document.getElementById('loadingScreen');
+
+    document.getElementById('btnLogin').onclick = () => {
+      if (auth.currentUser) signOut(auth);
+      else modalLogin.classList.remove('hidden');
+    };
+    document.getElementById('btnMasukDashboard').onclick = () => modalLogin.classList.remove('hidden');
+    document.getElementById('closeModal').onclick = () => modalLogin.classList.add('hidden');
+    document.getElementById('closeRegister').onclick = () => modalRegister.classList.add('hidden');
+    document.getElementById('showRegister').onclick = () => { modalLogin.classList.add('hidden'); modalRegister.classList.remove('hidden'); };
+    document.getElementById('showLogin').onclick = () => { modalRegister.classList.add('hidden'); modalLogin.classList.remove('hidden'); };
+
+    document.getElementById('submitLogin').onclick = async () => {
+      const email = document.getElementById('emailLogin').value.trim();
+      const pass = document.getElementById('passwordLogin').value;
+      if (!email ||!pass) return showToast('Gagal', 'Isi email dan password!', true);
+      document.getElementById('submitLogin').textContent = 'Masuk...';
+      document.getElementById('submitLogin').disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        modalLogin.classList.add('hidden');
+      } catch (e) {
+        let msg = 'Email atau password salah!';
+        if (e.code === 'auth/too-many-requests') msg = 'Kebanyakan coba. Tunggu 1 menit.';
+        showToast('Gagal', msg, true);
+      } finally {
+        document.getElementById('submitLogin').textContent = 'Masuk';
+        document.getElementById('submitLogin').disabled = false;
+      }
+    };
+
+    document.getElementById('submitRegister').onclick = async () => {
+      const nama = document.getElementById('namaDaftar').value.trim();
+      const kelas = document.getElementById('kelasDaftar').value.trim();
+      const email = document.getElementById('emailDaftar').value.trim();
+      const pass = document.getElementById('passwordDaftar').value;
+      if (!nama ||!kelas ||!email ||!pass) return showToast('Gagal', 'Lengkapi semua data!', true);
+      if (pass.length < 6) return showToast('Gagal', 'Password minimal 6 karakter!', true);
+      document.getElementById('submitRegister').textContent = 'Mendaftar...';
+      document.getElementById('submitRegister').disabled = true;
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        await set(ref(db, `users/${userCredential.user.uid}`), {
+          email: email, nama: nama, kelas: kelas, role: 'murid', daftar: Date.now()
+        });
+        showToast('Berhasil!', 'Pendaftaran berhasil! Auto login...');
+        modalRegister.classList.add('hidden');
+      } catch (e) {
+        if (e.code === 'auth/email-already-in-use') {
+          showToast('Gagal', 'Email sudah terdaftar. Silakan login.', true);
+        } else {
+          showToast('Gagal', e.message, true);
+        }
+      } finally {
+        document.getElementById('submitRegister').textContent = 'Daftar';
+        document.getElementById('submitRegister').disabled = false;
+      }
+    };
+
+    document.getElementById('submitLengkapi').onclick = async () => {
+      const nama = document.getElementById('namaLengkapi').value.trim();
+      const kelas = document.getElementById('kelasLengkapi').value.trim();
+      if (!nama ||!kelas) return showToast('Gagal', 'Lengkapi nama dan kelas!', true);
+      const user = auth.currentUser;
+      await set(ref(db, `users/${user.uid}`), {
+        email: user.email, nama: nama, kelas: kelas, role: 'murid', daftar: Date.now()
+      });
+      modalLengkapi.classList.add('hidden');
+      showToast('Berhasil!', 'Data lengkap. Masuk dashboard...');
+      // FORCE RELOAD STATE
+      window.location.reload();
+    };
+
+    // AUTH STATE - FIX TOTAL
+    let authReady = false;
+    onAuthStateChanged(auth, async (user) => {
+      if (!authReady) {
+        authReady = true;
+        loadingScreen.style.display = 'none';
+      }
+
+      if (user) {
+        try {
+          const snapshot = await get(ref(db, `users/${user.uid}`));
+          const userData = snapshot.val();
+
+          if (userData && userData.role === 'murid') {
+            // HIDE LANDING, SHOW DASHBOARD
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('btnLogin').textContent = 'Logout';
+            document.getElementById('btnLogin').onclick = () => signOut(auth);
+            document.getElementById('dashboardMurid').classList.remove('hidden');
+            document.getElementById('namaMurid').textContent = userData.nama;
+            document.getElementById('kelasMurid').textContent = userData.kelas;
+
+            loadPengumuman();
+            loadTugasAktif();
+            loadTugasTerkirim(user.uid);
+            loadNilai(user.uid);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else if (userData && userData.role === 'guru') {
+            await signOut(auth);
+            showToast('Gagal', 'Ini portal murid. Login di Portal Guru.', true);
+          } else {
+            // AKUN ADA TAPI DATA KOSONG
+            document.getElementById('landingPage').classList.remove('hidden');
+            document.getElementById('dashboardMurid').classList.add('hidden');
+            modalLengkapi.classList.remove('hidden');
+            document.getElementById('btnLogin').textContent = 'Lengkapi Data';
+            document.getElementById('btnLogin').onclick = () => modalLengkapi.classList.remove('hidden');
+          }
+        } catch (error) {
+          console.error(error);
+          await signOut(auth);
+        }
+      } else {
+        // LOGOUT - SHOW LANDING
+        document.getElementById('landingPage').classList.remove('hidden');
+        document.getElementById('dashboardMurid').classList.add('hidden');
+        document.getElementById('btnLogin').textContent = 'Login Murid';
+        document.getElementById('btnLogin').onclick = () => modalLogin.classList.remove('hidden');
+      }
+    });
+
+    function loadPengumuman() {
+      onValue(ref(db, 'pengumuman'), (snapshot) => {
+        const list = document.getElementById('listPengumuman');
+        list.innerHTML = '';
+        const data = snapshot.val();
+        if (data) {
+          Object.keys(data).reverse().forEach(key => {
+            const item = data[key];
+            list.innerHTML += `<div class="p-4 bg-indigo-500/10 rounded-lg border-l-4 border-indigo-500" data-aos="fade-up"><p class="text-xs text-indigo-400 font-bold">${item.tanggal}</p><h4 class="font-bold my-1 text-white">${item.judul}</h4><p class="text-sm text-slate-400">${item.isi}</p></div>`;
+          });
+        } else { list.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Belum ada pengumuman</p>'; }
+      });
+    }
+
+    function loadTugasAktif() {
+      onValue(ref(db, 'tugas_aktif'), (snapshot) => {
+        const list = document.getElementById('tab-aktif');
+        list.innerHTML = '';
+        const data = snapshot.val();
+        if (data) {
+          Object.keys(data).forEach(key => {
+            const tugas = data[key];
+            const deadline = new Date(tugas.deadline).toLocaleString('id-ID');
+            const sisaHari = Math.ceil((tugas.deadline - Date.now()) / (1000*60*60*24));
+            list.innerHTML += `<div class="p-3 bg-red-500/10 rounded-lg border-l-4 border-red-500 text-sm"><p class="font-bold text-white">${tugas.mapel}</p><p class="text-xs text-slate-400">${tugas.deskripsi}</p><p class="text-xs text-red-400 mt-1"><i class="fas fa-clock"></i> Deadline: ${deadline} (${sisaHari} hari)</p></div>`;
+          });
+        } else { list.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Tidak ada tugas aktif</p>'; }
+      });
+    }
+
+    function loadTugasTerkirim(uid) {
+      onValue(ref(db, `tugas/${uid}`), (snapshot) => {
+        const list = document.getElementById('tab-terkirim');
+        list.innerHTML = '';
+        const data = snapshot.val();
+        if (data) {
+          Object.keys(data).reverse().forEach(key => {
+            const tugas = data[key];
+            list.innerHTML += `<div class="p-3 bg-green-500/10 rounded-lg border-l-4 border-green-500 text-sm"><div class="flex justify-between items-start"><div><p class="font-bold text-white">${tugas.mapel}</p><p class="text-xs text-slate-400">${tugas.fileName}</p><p class="text-xs text-green-400">${tugas.tanggal}</p></div><i class="fas fa-check-circle text-green-500"></i></div></div>`;
+          });
+        } else { list.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Belum ada tugas terkirim</p>'; }
+      });
+    }
+
+    function loadNilai(uid) {
+      onValue(ref(db, `nilai`), (snapshot) => {
+        const list = document.getElementById('listNilai');
+        list.innerHTML = '';
+        const data = snapshot.val();
+        let adaNilai = false;
+        if (data) {
+          Object.keys(data).forEach(kelas => {
+            if (data[kelas][uid]) {
+              adaNilai = true;
+              Object.keys(data[kelas][uid]).forEach(key => {
+                const n = data[kelas][uid][key];
+                const warna = n.nilai >= 80? 'bg-green-500/20 text-green-400' : n.nilai >= 60? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400';
+                list.innerHTML += `<div class="flex justify-between items-center p-3 rounded-lg ${warna}"><div><p class="font-bold text-sm text-white">${n.mapel}</p><p class="text-xs text-slate-400">${n.jenis}</p></div><p class="text-2xl font-bold">${n.nilai}</p></div>`;
+              });
+            }
+          });
+        }
+        if (!adaNilai) list.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Belum ada nilai</p>';
+      });
+    }
+
+    document.getElementById('btnUploadTugas').onclick = () => {
+      const file = document.getElementById('fileTugas').files[0];
+      const mapel = document.getElementById('mapelTugas').value;
+      const user = auth.currentUser;
+      if (!file ||!mapel) return showToast('Gagal', 'Pilih mapel dan file dulu!', true);
+      if (!user) return showToast('Gagal', 'Login dulu!', true);
+      const fileRef = storageRef(storage, `tugas/${user.uid}/${mapel}/${file.name}`);
+      const uploadTask = uploadBytesResumable(fileRef, file);
+      document.getElementById('progressUpload').classList.remove('hidden');
+      uploadTask.on('state_changed', (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+      }, (error) => {
+        showToast('Gagal', 'Upload gagal: ' + error, true);
+        document.getElementById('progressUpload').classList.add('hidden');
+      }, async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        await push(ref(db, `tugas/${user.uid}`), { mapel, url, fileName: file.name, tanggal: new Date().toLocaleString('id-ID'), timestamp: Date.now() });
+        document.getElementById('progressUpload').classList.add('hidden');
+        document.getElementById('fileTugas').value = '';
+        document.getElementById('mapelTugas').value = '';
+        document.querySelector('[data-tab="terkirim"]').click();
+        showToast('Upload Berhasil!', `Tugas ${mapel} berhasil dikirim!`);
+      });
+    };
+  </script>
+</body>
+</html>

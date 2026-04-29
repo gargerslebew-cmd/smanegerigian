@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Guru - SMA NEGERI GIAN CIANJUR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+    * { font-family: 'Poppins', sans-serif; }
+    body {
+      background: #0f172a;
+      background-image:
+        radial-gradient(at 20% 30%, #4c1d95 0px, transparent 50%),
+        radial-gradient(at 80% 70%, #701a75 0px, transparent 50%),
+        radial-gradient(at 50% 50%, #1e293b 0px, transparent 50%);
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+.gradient-bg { background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fb7185 100%); }
+.gradient-text {
+      background: linear-gradient(135deg, #f9a8d4 0%, #f472b6 50%, #fb7185 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+.sidebar-link { transition: all 0.2s; border-left: 3px solid transparent; }
+.sidebar-link.active {
+      background: rgba(240,147,251,0.15);
+      color: #f9a8d4;
+      border-left: 3px solid #f472b6;
+    }
+.card-glass {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(71, 85, 105, 0.5);
+      transition: all 0.3s;
+    }
+.card-glass:hover {
+      border-color: rgba(244, 114, 182, 0.5);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -10px rgba(244, 114, 182, 0.3);
+    }
+.input-dark {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+    }
+.input-dark:focus {
+      border-color: #f472b6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+    }
+.input-dark::placeholder { color: #64748b; }
+    select.input-dark option { background: #1e293b; }
+.toast {
+      position: fixed; top: 80px; right: 20px; z-index: 100;
+      transform: translateX(400px); transition: all 0.4s;
+    }
+.toast.show { transform: translateX(0); }
+.glow { animation: glow 2s ease-in-out infinite alternate; }
+    @keyframes glow {
+      from { box-shadow: 0 0 20px rgba(244, 114, 182, 0.3); }
+      to { box-shadow: 0 0 30px rgba(244, 114, 182, 0.6); }
+    }
+.float { animation: float 3s ease-in-out infinite; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    html { scroll-behavior: smooth; }
+.skeleton { animation: skeleton 1.5s ease-in-out infinite; background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); background-size: 200% 100%; }
+    @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="fixed inset-0 z-[100] flex items-center justify-center gradient-bg">
+    <div class="text-center">
+      <div class="w-20 h-20 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="text-white text-xl font-bold">Loading...</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+    <i class="fas fa-check-circle text-2xl"></i>
+    <div>
+      <p class="font-bold" id="toastTitle">Berhasil!</p>
+      <p class="text-sm" id="toastMsg">Aksi kamu berhasil</p>
+    </div>
+  </div>
+
+  <!-- LOGIN / REGISTER -->
+  <div id="halamanAuthGuru" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-20 right-10 w-72 h-72 bg-rose-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    </div>
+
+    <div class="card-glass rounded-3xl p-8 max-w-md w-full shadow-2xl relative z-10" data-aos="zoom-in">
+      <div class="text-center mb-8">
+        <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-4 float glow">
+          <i class="fas fa-chalkboard-teacher text-white text-4xl"></i>
+        </div>
+        <h1 class="text-3xl font-bold gradient-text">Portal Guru</h1>
+        <p class="text-slate-400 mt-2">SMA NEGERI GIAN CIANJUR</p>
+      </div>
+
+      <!-- TAB LOGIN / REGISTER -->
+      <div class="flex gap-2 mb-6 bg-slate-800 p-1 rounded-xl">
+        <button id="tabLoginGuru" class="tab-auth active flex-1 py-2 rounded-lg text-sm font-medium bg-slate-700 text-white">Login</button>
+        <button id="tabRegisterGuru" class="tab-auth flex-1 py-2 rounded-lg text-sm font-medium text-slate-400">Register</button>
+      </div>
+
+      <!-- FORM LOGIN -->
+      <div id="formLoginGuru">
+        <input id="emailGuru" type="email" placeholder="Email Guru" class="input-dark w-full px-4 py-3 rounded-xl mb-4">
+        <input id="passwordGuru" type="password" placeholder="Password" class="input-dark w-full px-4 py-3 rounded-xl mb-6">
+        <button id="btnLoginGuru" class="w-full py-3 gradient-bg text-white rounded-xl font-bold hover:opacity-90 transition glow">
+          Masuk Dashboard
+        </button>
+      </div>
+
+      <!-- FORM REGISTER -->
+      <div id="formRegisterGuru" class="hidden">
+        <input id="namaGuruDaftar" type="text" placeholder="Nama Lengkap + Gelar" class="input-dark w-full px-4 py-3 rounded-xl mb-3">
+        <input id="mapelGuruDaftar" type="text" placeholder="Mata Pelajaran" class="input-dark w-full px-4 py-3 rounded-xl mb-3">
+        <input id="emailGuruDaftar" type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl mb-3 input-dark">
+        <input id="passwordGuruDaftar" type="password" placeholder="Password min 6 karakter" class="w-full px-4 py-3 rounded-xl mb-6 input-dark">
+        <button id="submitRegisterGuru" class="w-full py-3 gradient-bg text-white rounded-xl font-bold glow">Daftar Sebagai Guru</button>
+      </div>
+
+      <p id="errorAuth" class="text-red-400 text-sm mt-4 text-center hidden"></p>
+      <p class="text-center mt-6 text-xs text-slate-500">
+        <a href="index.html" class="text-pink-400 hover:underline">← Kembali ke Portal Murid</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardGuru" class="hidden h-screen flex flex-col md:flex-row overflow-hidden">
+    <div id="overlay" class="fixed inset-0 bg-black/70 z-40 md:hidden hidden" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-slate-900/80 backdrop-blur-xl border-r border-slate-800 fixed md:relative h-full z-50 -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col">
+      <div class="p-6 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center glow">
+            <i class="fas fa-chalkboard-teacher text-white text-xl"></i>
+          </div>
+          <div>
+            <span class="font-bold text-xl gradient-text">Portal Guru</span>
+            <p class="text-xs text-slate-500">SMA NEGERI GIAN CIANJUR >
+          </div>
+        </div>
+      </div>
+
+      <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+        <a href="#" data-page="pengumuman" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg">
+          <i class="fas fa-bullhorn w-5 text-center"></i> Buat Pengumuman
+        </a>
+        <a href="#" data-page="tugas-otomatis" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg">
+          <i class="fas fa-robot w-5 text-center"></i> Tugas Otomatis
+        </a>
+        <a href="#" data-page="tugas" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg">
+          <i class="fas fa-tasks w-5 text-center"></i> Tugas Masuk
+        </a>
+        <a href="#" data-page="nilai" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg">
+          <i class="fas fa-star w-5 text-center"></i> Input Nilai
+        </a>
+        <a href="#" data-page="data-murid" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg">
+          <i class="fas fa-users w-5 text-center"></i> Data Murid
+        </a>
+        <a href="#" data-page="absensi" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg">
+          <i class="fas fa-qrcode w-5 text-center"></i> Absensi QR
+        </a>
+      </nav>
+
+      <div class="p-4 border-t border-slate-800">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white font-bold">G</div>
+          <div class="text-sm flex-1 min-w-0">
+            <p class="text-slate-500">Login sebagai:</p>
+            <p id="emailGuruAktif" class="font-bold truncate text-slate-200">guru@gmail.com</p>
+            <p id="mapelGuruAktif" class="text-xs text-slate-400 truncate">-</p>
+          </div>
+        </div>
+        <button id="btnLogout" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition">
+          <i class="fas fa-sign-out-alt mr-2"></i>Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <header class="md:hidden gradient-bg p-4 flex justify-between items-center text-white sticky top-0 z-30">
+        <h1 class="font-bold text-lg">Portal Guru</h1>
+        <button id="toggleSidebar"><i class="fas fa-bars text-xl"></i></button>
+      </header>
+
+      <main class="flex-1 overflow-y-auto p-4 md:p-8">
+        <!-- PAGE: PENGUMUMAN -->
+        <div id="page-pengumuman" class="page-content">
+          <div class="mb-8" data-aos="fade-down">
+            <h1 class="text-3xl md:text-4xl font-bold">Buat <span class="gradient-text">Pengumuman</span></h1>
+            <p class="text-slate-400 mt-1">Informasi akan terkirim ke semua murid</p>
+          </div>
+          <div class="card-glass p-6 md:p-8 rounded-2xl" data-aos="fade-up">
+            <input id="judulPengumuman" type="text" placeholder="Judul Pengumuman" class="input-dark w-full px-4 py-3 rounded-xl mb-4">
+            <textarea id="isiPengumuman" placeholder="Tulis isi pengumuman lengkap di sini..." class="input-dark w-full px-4 py-3 rounded-xl mb-4 h-32"></textarea>
+            <button id="submitPengumuman" class="px-6 py-3 gradient-bg text-white rounded-xl font-bold hover:opacity-90 transition glow">
+              <i class="fas fa-paper-plane mr-2"></i> Publish ke Murid
+            </button>
+            <p id="statusPengumuman" class="text-sm mt-3 hidden"></p>
+          </div>
+        </div>
+
+        <!-- PAGE: TUGAS OTOMATIS -->
+        <div id="page-tugas-otomatis" class="page-content hidden">
+          <div class="mb-8" data-aos="fade-down">
+            <h1 class="text-3xl md:text-4xl font-bold">Tugas <span class="gradient-text">Otomatis</span></h1>
+            <p class="text-slate-400 mt-1">Generate tugas untuk semua mapel SMA sekali klik</p>
+          </div>
+          <div class="card-glass p-6 md:p-8 rounded-2xl" data-aos="fade-up">
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label class="text-sm text-slate-400 mb-2 block">Pilih Kelas</label>
+                <select id="kelasTugasOtomatis" class="input-dark w-full px-4 py-3 rounded-xl">
+                  <option value="">Semua Kelas</option>
+                  <option>X IPA 1</option><option>X IPA 2</option><option>X IPS 1</option>
+                  <option>XI IPA 1</option><option>XI IPA 2</option><option>XI IPS 1</option>
+                  <option>XII IPA 1</option><option>XII IPA 2</option><option>XII IPS 1</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm text-slate-400 mb-2 block">Deadline Tugas</label>
+                <input id="deadlineTugas" type="datetime-local" class="input-dark w-full px-4 py-3 rounded-xl">
+              </div>
+            </div>
+            <div class="mb-6">
+              <label class="text-sm text-slate-400 mb-2 block">Pilih Mata Pelajaran - Auto Generate</label>
+              <div id="listMapel" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-64 overflow-y-auto p-2"></div>
+            </div>
+            <div class="mb-6">
+              <label class="text-sm text-slate-400 mb-2 block">Deskripsi Tugas Default</label>
+              <textarea id="deskripsiTugasOtomatis" class="input-dark w-full px-4 py-3 rounded-xl h-24" placeholder="Contoh: Kerjakan soal di LKS halaman 45-50. Upload dalam format PDF.">Kerjakan latihan soal sesuai materi yang telah diajarkan. Kumpulkan dalam format PDF maksimal 5MB.</textarea>
+            </div>
+            <button id="submitTugasOtomatis" class="px-6 py-3 gradient-bg text-white rounded-xl font-bold hover:opacity-90 transition glow">
+              <i class="fas fa-magic mr-2"></i> Generate & Publish Tugas
+            </button>
+            <p id="statusTugasOtomatis" class="text-sm mt-4 hidden"></p>
+          </div>
+        </div>
+
+        <!-- PAGE: TUGAS MASUK -->
+        <div id="page-tugas" class="page-content hidden">
+          <div class="mb-8" data-aos="fade-down">
+            <h1 class="text-3xl md:text-4xl font-bold">Tugas <span class="gradient-text">Masuk</span></h1>
+            <p class="text-slate-400 mt-1">Download & periksa tugas dari murid</p>
+          </div>
+          <div class="card-glass p-6 md:p-8 rounded-2xl" data-aos="fade-up">
+            <div id="listTugas" class="space-y-4"></div>
+          </div>
+        </div>
+
+        <!-- PAGE: INPUT NILAI -->
+        <div id="page-nilai" class="page-content hidden">
+          <div class="mb-8" data-aos="fade-down">
+            <h1 class="text-3xl md:text-4xl font-bold">Input <span class="gradient-text">Nilai</span></h1>
+            <p class="text-slate-400 mt-1">Masukkan nilai tugas/ujian murid</p>
+          </div>
+          <div class="card-glass p-6 md:p-8 rounded-2xl" data-aos="fade-up">
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+              <select id="kelasNilai" class="input-dark px-4 py-3 rounded-xl">
+                <option value="">Pilih Kelas</option>
+                <option>XII IPA 1</option><option>XII IPA 2</option>
+              </select>
+              <select id="mapelNilai" class="input-dark px-4 py-3 rounded-xl">
+                <option value="">Pilih Mapel</option>
+              </select>
+              <input id="namaMurid" type="text" placeholder="Nama Murid" class="input-dark px-4 py-3 rounded-xl">
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+              <input id="jenisNilai" type="text" placeholder="Jenis: Tugas 1 / UTS" class="input-dark px-4 py-3 rounded-xl">
+              <input id="angkaNilai" type="number" placeholder="Nilai 0-100" class="input-dark px-4 py-3 rounded-xl">
+            </div>
+            <button id="submitNilai" class="px-6 py-3 gradient-bg text-white rounded-xl font-bold hover:opacity-90 transition glow">
+              <i class="fas fa-save mr-2"></i> Simpan Nilai
+            </button>
+            <p id="statusNilai" class="text-sm mt-3 hidden"></p>
+          </div>
+        </div>
+
+        <!-- PAGE: DATA MURID -->
+        <div id="page-data-murid" class="page-content hidden">
+          <div class="mb-8" data-aos="fade-down">
+            <h1 class="text-3xl md:text-4xl font-bold">Data <span class="gradient-text">Murid</span></h1>
+            <p class="text-slate-400 mt-1">Daftar murid yang sudah terdaftar di sistem</p>
+          </div>
+          <div class="card-glass p-6 md:p-8 rounded-2xl" data-aos="fade-up">
+            <div class="mb-4 flex gap-3">
+              <input id="searchMurid" type="text" placeholder="Cari nama/kelas/email..." class="input-dark flex-1 px-4 py-2 rounded-xl">
+              <select id="filterKelas" class="input-dark px-4 py-2 rounded-xl">
+                <option value="">Semua Kelas</option>
+                <option>X IPA 1</option><option>X IPA 2</option><option>X IPS 1</option>
+                <option>XI IPA 1</option><option>XI IPA 2</option><option>XI IPS 1</option>
+                <option>XII IPA 1</option><option>XII IPA 2</option><option>XII IPS 1</option>
+              </select>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-slate-700 text-left">
+                    <th class="py-3 px-2">Nama</th>
+                    <th class="py-3 px-2">Kelas</th>
+                    <th class="py-3 px-2">Email</th>
+                    <th class="py-3 px-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelMurid">
+                  <tr><td colspan="4" class="text-center py-8 text-slate-500">Loading data murid...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-xs text-slate-500 mt-4">Total: <span id="totalMurid" class="font-bold">0</span> murid terdaftar</p>
+          </div>
+        </div>
+
+        <!-- PAGE: ABSENSI -->
+        <div id="page-absensi" class="page-content hidden">
+          <div class="mb-8" data-aos="fade-down">
+            <h1 class="text-3xl md:text-4xl font-bold">Absensi <span class="gradient-text">QR</span></h1>
+            <p class="text-slate-400 mt-1">Generate QR Code untuk absensi kelas</p>
+          </div>
+          <div class="card-glass p-6 md:p-8 rounded-2xl text-center" data-aos="fade-up">
+            <div id="qrCode" class="w-64 h-64 bg-white mx-auto rounded-xl flex items-center justify-center mb-6 p-4">
+              <p class="text-gray-800">Klik Generate QR</p>
+            </div>
+            <button id="generateQR" class="px-6 py-3 gradient-bg text-white rounded-xl font-bold hover:opacity-90 transition glow">
+              <i class="fas fa-qrcode mr-2"></i> Generate QR Hari Ini
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref, push, onValue, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCuT7JzSnFhmFoNRAq5EUJfy3IU9DmP5gE",
+      authDomain: "sekolah-f2790.firebaseapp.com",
+      databaseURL: "https://sekolah-f2790-default-rtdb.firebaseio.com",
+      projectId: "sekolah-f2790",
+      storageBucket: "sekolah-f2790.firebasestorage.app",
+      messagingSenderId: "748658464539",
+      appId: "1:748658464539:web:2c54c6c76c85c44680e5be"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    // PERSIST LOGIN
+    setPersistence(auth, browserLocalPersistence);
+
+    AOS.init({ duration: 600, once: true });
+
+    const MAPEL_SMA = ["Matematika Wajib", "Matematika Peminatan", "Bahasa Indonesia", "Bahasa Inggris", "Fisika", "Kimia", "Biologi", "Ekonomi", "Geografi", "Sosiologi", "Sejarah Indonesia", "Sejarah Peminatan", "Pendidikan Agama", "PPKN", "Seni Budaya", "PJOK", "Prakarya & Kewirausahaan", "Informatika"];
+
+    const listMapelDiv = document.getElementById('listMapel');
+    MAPEL_SMA.forEach(mapel => {
+      listMapelDiv.innerHTML += `
+        <label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-800/50 cursor-pointer">
+          <input type="checkbox" value="${mapel}" class="mapel-checkbox w-4 h-4 text-pink-500 bg-slate-800 border-slate-600 rounded focus:ring-pink-500">
+          <span class="text-sm">${mapel}</span>
+        </label>
+      `;
+    });
+
+    const mapelNilaiSelect = document.getElementById('mapelNilai');
+    MAPEL_SMA.forEach(mapel => { mapelNilaiSelect.innerHTML += `<option>${mapel}</option>`; });
+
+    // TAB LOGIN/REGISTER
+    document.getElementById('tabLoginGuru').onclick = () => {
+      document.getElementById('tabLoginGuru').classList.add('active', 'bg-slate-700', 'text-white');
+      document.getElementById('tabLoginGuru').classList.remove('text-slate-400');
+      document.getElementById('tabRegisterGuru').classList.remove('active', 'bg-slate-700', 'text-white');
+      document.getElementById('tabRegisterGuru').classList.add('text-slate-400');
+      document.getElementById('formLoginGuru').classList.remove('hidden');
+      document.getElementById('formRegisterGuru').classList.add('hidden');
+    };
+    document.getElementById('tabRegisterGuru').onclick = () => {
+      document.getElementById('tabRegisterGuru').classList.add('active', 'bg-slate-700', 'text-white');
+      document.getElementById('tabRegisterGuru').classList.remove('text-slate-400');
+      document.getElementById('tabLoginGuru').classList.remove('active', 'bg-slate-700', 'text-white');
+      document.getElementById('tabLoginGuru').classList.add('text-slate-400');
+      document.getElementById('formRegisterGuru').classList.remove('hidden');
+      document.getElementById('formLoginGuru').classList.add('hidden');
+    };
+
+    // SPA Navigation
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = e.currentTarget.dataset.page;
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+        document.getElementById(`page-${page}`).classList.remove('hidden');
+        closeSidebar();
+      });
+    });
+
+    // Sidebar Mobile
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    function closeSidebar() { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
+    function openSidebar() { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
+    document.getElementById('toggleSidebar').onclick = openSidebar;
+    window.closeSidebar = closeSidebar;
+
+    // Auth
+    const halamanAuth = document.getElementById('halamanAuthGuru');
+    const dashboard = document.getElementById('dashboardGuru');
+    const errorAuth = document.getElementById('errorAuth');
+    const loadingScreen = document.getElementById('loadingScreen');
+
+    function showError(msg) {
+      errorAuth.textContent = msg;
+      errorAuth.classList.remove('hidden');
+      setTimeout(() => errorAuth.classList.add('hidden'), 3000);
+    }
+
+    function showToast(title, msg, isError = false) {
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toast').className = isError? 'toast bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 show' : 'toast bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 show';
+      setTimeout(() => document.getElementById('toast').classList.remove('show'), 3000);
+    }
+
+    // LOGIN
+    document.getElementById('btnLoginGuru').onclick = async () => {
+      const email = document.getElementById('emailGuru').value;
+      const pass = document.getElementById('passwordGuru').value;
+      errorAuth.classList.add('hidden');
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (e) {
+        showError('Email atau password salah!');
+      }
+    };
+
+    // REGISTER GURU
+    document.getElementById('submitRegisterGuru').onclick = async () => {
+      const nama = document.getElementById('namaGuruDaftar').value.trim();
+      const mapel = document.getElementById('mapelGuruDaftar').value.trim();
+      const email = document.getElementById('emailGuruDaftar').value.trim();
+      const pass = document.getElementById('passwordGuruDaftar').value;
+
+      if (!nama ||!mapel ||!email ||!pass) return showError('Lengkapi semua data!');
+      if (pass.length < 6) return showError('Password minimal 6 karakter!');
+
+      document.getElementById('submitRegisterGuru').textContent = 'Mendaftar...';
+      document.getElementById('submitRegisterGuru').disabled = true;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        await set(ref(db, `users/${userCredential.user.uid}`), {
+          email: email, nama: nama, mapel: mapel, role: 'guru', daftar: Date.now()
+        });
+        showError('Pendaftaran guru berhasil! Silakan login.');
+        document.getElementById('tabLoginGuru').click();
+      } catch (e) {
+        if (e.code === 'auth/email-already-in-use') {
+          showError('Email sudah terdaftar. Silakan login.');
+        } else {
+          showError('Gagal daftar: ' + e.message);
+        }
+      } finally {
+        document.getElementById('submitRegisterGuru').textContent = 'Daftar Sebagai Guru';
+        document.getElementById('submitRegisterGuru').disabled = false;
+      }
+    };
+
+    // AUTH STATE - FIX REFRESH
+    let authReady = false;
+    onAuthStateChanged(auth, async (user) => {
+      if (!authReady) {
+        authReady = true;
+        loadingScreen.style.display = 'none';
+      }
+
+      if (user) {
+        const snapshot = await get(ref(db, `users/${user.uid}`));
+        const userData = snapshot.val();
+        if (userData && userData.role === 'guru') {
+          halamanAuth.classList.add('hidden');
+          dashboard.classList.remove('hidden');
+          document.getElementById('emailGuruAktif').textContent = user.email;
+          document.getElementById('mapelGuruAktif').textContent = userData.mapel || '-';
+          loadTugasMasuk();
+          loadDataMurid();
+        } else {
+          await signOut(auth);
+          showError('Akses ditolak. Akun ini bukan guru.');
+        }
+      } else {
+        halamanAuth.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('btnLogout').onclick = () => signOut(auth);
+
+    function showStatus(id, msg, isError = false) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.className = isError? 'text-red-400 text-sm mt-3' : 'text-green-400 text-sm mt-3';
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 3000);
+    }
+
+    // Fitur Pengumuman
+    document.getElementById('submitPengumuman').onclick = async () => {
+      const judul = document.getElementById('judulPengumuman').value;
+      const isi = document.getElementById('isiPengumuman').value;
+      if (!judul ||!isi) return showStatus('statusPengumuman', 'Lengkapi judul dan isi!', true);
+      try {
+        await push(ref(db, 'pengumuman'), {
+          judul, isi,
+          tanggal: new Date().toLocaleDateString('id-ID'),
+          timestamp: Date.now(),
+          author: auth.currentUser.email
+        });
+        showStatus('statusPengumuman', 'Pengumuman berhasil dipublish!');
+        document.getElementById('judulPengumuman').value = '';
+        document.getElementById('isiPengumuman').value = '';
+      } catch (e) { showStatus('statusPengumuman', 'Error: ' + e.message, true); }
+    };
+
+    // Fitur Tugas Otomatis
+    document.getElementById('submitTugasOtomatis').onclick = async () => {
+      const kelas = document.getElementById('kelasTugasOtomatis').value;
+      const deadline = document.getElementById('deadlineTugas').value;
+      const deskripsi = document.getElementById('deskripsiTugasOtomatis').value;
+      const mapelChecked = Array.from(document.querySelectorAll('.mapel-checkbox:checked')).map(cb => cb.value);
+
+      if (!kelas ||!deadline || mapelChecked.length === 0) {
+        return showStatus('statusTugasOtomatis', 'Pilih kelas, deadline, dan minimal 1 mapel!', true);
+      }
+
+      showStatus('statusTugasOtomatis', 'Membuat tugas...');
+      try {
+        const promises = mapelChecked.map(mapel => {
+          return push(ref(db, 'tugas_aktif'), {
+            mapel, kelas, deskripsi,
+            deadline: new Date(deadline).getTime(),
+            dibuat: Date.now(),
+            author: auth.currentUser.email,
+            status: 'aktif'
+          });
+        });
+        await Promise.all(promises);
+        showStatus('statusTugasOtomatis', `Berhasil! ${mapelChecked.length} tugas dipublish ke kelas ${kelas}`);
+        document.querySelectorAll('.mapel-checkbox').forEach(cb => cb.checked = false);
+        document.getElementById('deadlineTugas').value = '';
+      } catch (e) { showStatus('statusTugasOtomatis', 'Error: ' + e.message, true); }
+    };
+
+// Fitur Tugas Masuk
+    function loadTugasMasuk() {
+      onValue(ref(db, 'tugas'), (snapshot) => {
+        const list = document.getElementById('listTugas');
+        list.innerHTML = '';
+        const data = snapshot.val();
+        if (data) {
+          Object.keys(data).forEach(uid => {
+            Object.keys(data[uid]).forEach(key => {
+              const tugas = data[uid][key];
+              list.innerHTML += `
+                <div class="p-4 bg-slate-800/50 rounded-xl flex flex-col md:flex-row md:justify-between md:items-center gap-3 border border-slate-700" data-aos="fade-up">
+                  <div>
+                    <p class="font-bold text-slate-200">${tugas.mapel}</p>
+                    <p class="text-sm text-slate-400">${tugas.fileName} • ${tugas.tanggal}</p>
+                  </div>
+                  <a href="${tugas.url}" target="_blank" class="px-4 py-2 gradient-bg text-white rounded-lg text-sm font-medium text-center">
+                    <i class="fas fa-download mr-1"></i> Download
+                  </a>
+                </div>`;
+            });
+          });
+        } else {
+          list.innerHTML = `<div class="text-center py-8 text-slate-500"><i class="fas fa-folder-open text-4xl mb-3"></i><p>Belum ada tugas masuk</p></div>`;
+        }
+      });
+    }
+
+    // Fitur Input Nilai
+    document.getElementById('submitNilai').onclick = async () => {
+      const kelas = document.getElementById('kelasNilai').value;
+      const mapel = document.getElementById('mapelNilai').value;
+      const nama = document.getElementById('namaMurid').value.trim();
+      const jenis = document.getElementById('jenisNilai').value.trim();
+      const nilai = document.getElementById('angkaNilai').value;
+      if(!kelas ||!mapel ||!nama ||!jenis ||!nilai) return showStatus('statusNilai', 'Lengkapi semua field!', true);
+      if(nilai < 0 || nilai > 100) return showStatus('statusNilai', 'Nilai harus 0-100!', true);
+      try {
+        await push(ref(db, `nilai/${kelas}/${nama}`), { mapel, jenis, nilai: parseInt(nilai), timestamp: Date.now(), guru: auth.currentUser.email });
+        showStatus('statusNilai', 'Nilai berhasil disimpan!');
+        document.getElementById('namaMurid').value = '';
+        document.getElementById('jenisNilai').value = '';
+        document.getElementById('angkaNilai').value = '';
+      } catch(e) { showStatus('statusNilai', 'Error: ' + e.message, true); }
+    };
+
+    // FITUR DATA MURID
+    let semuaMurid = [];
+    function loadDataMurid() {
+      onValue(ref(db, 'users'), (snapshot) => {
+        const tabel = document.getElementById('tabelMurid');
+        const data = snapshot.val();
+        semuaMurid = [];
+        if (data) {
+          Object.keys(data).forEach(uid => {
+            if (data[uid].role === 'murid') {
+              semuaMurid.push({ uid,...data[uid] });
+            }
+          });
+        }
+        renderTabelMurid(semuaMurid);
+      });
+    }
+
+    function renderTabelMurid(data) {
+      const tabel = document.getElementById('tabelMurid');
+      document.getElementById('totalMurid').textContent = data.length;
+      if (data.length === 0) {
+        tabel.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-slate-500">Belum ada murid terdaftar</td></tr>';
+        return;
+      }
+      tabel.innerHTML = data.map(m => `
+        <tr class="border-b border-slate-800 hover:bg-slate-800/30">
+          <td class="py-3 px-2 font-medium">${m.nama || '-'}</td>
+          <td class="py-3 px-2">${m.kelas || '-'}</td>
+          <td class="py-3 px-2 text-slate-400">${m.email}</td>
+          <td class="py-3 px-2"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">Aktif</span></td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('searchMurid').addEventListener('input', filterMurid);
+    document.getElementById('filterKelas').addEventListener('change', filterMurid);
+
+    function filterMurid() {
+      const search = document.getElementById('searchMurid').value.toLowerCase();
+      const kelas = document.getElementById('filterKelas').value;
+      const filtered = semuaMurid.filter(m => {
+        const matchSearch = m.nama?.toLowerCase().includes(search) || m.email?.toLowerCase().includes(search) || m.kelas?.toLowerCase().includes(search);
+        const matchKelas =!kelas || m.kelas === kelas;
+        return matchSearch && matchKelas;
+      });
+      renderTabelMurid(filtered);
+    }
+
+    // Fitur Generate QR
+    document.getElementById('generateQR').onclick = () => {
+      const qrDiv = document.getElementById('qrCode');
+      const token = `ABSEN-${Date.now()}`;
+      qrDiv.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${token}" class="rounded-lg">`;
+      set(ref(db, `absensi/${token}`), {
+        aktif: true,
+        tanggal: new Date().toLocaleDateString('id-ID'),
+        dibuat: Date.now(),
+        guru: auth.currentUser.email
+      });
+      showToast('Berhasil!', 'QR Code absensi dibuat');
+    };
+  </script>
+</body>
+</html>
